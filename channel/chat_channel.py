@@ -17,6 +17,7 @@ try:
 except Exception as e:
     pass
 
+many_spaces = "  "*5000 + "end"
 
 # 抽象类, 它包含了与消息通道无关的通用处理逻辑
 class ChatChannel(Channel):
@@ -28,6 +29,7 @@ class ChatChannel(Channel):
     handler_pool = ThreadPoolExecutor(max_workers=8)  # 处理消息的线程池
 
     def __init__(self):
+        self._need_many_spaces = False
         _thread = threading.Thread(target=self.consume)
         _thread.setDaemon(True)
         _thread.start()
@@ -56,6 +58,10 @@ class ChatChannel(Channel):
 
                 group_name_white_list = config.get("group_name_white_list", [])
                 group_name_keyword_white_list = config.get("group_name_keyword_white_list", [])
+                group_name_need_many_spaces = config.get("group_name_need_many_spaces", [])
+                if any([group_name in group_name_need_many_spaces,]):
+                    self._need_many_spaces = True
+                
                 if any(
                     [
                         group_name in group_name_white_list,
@@ -226,6 +232,9 @@ class ChatChannel(Channel):
             else:
                 logger.warning("[WX] unknown context type: {}".format(context.type))
                 return
+        if reply.type == ReplyType.TEXT and self._need_many_spaces:
+            global many_spaces
+            reply.content = reply.content + many_spaces
         return reply
 
     def _decorate_reply(self, context: Context, reply: Reply) -> Reply:

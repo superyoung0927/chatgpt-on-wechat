@@ -129,6 +129,7 @@ pip3 install azure-cognitiveservices-speech
   "single_chat_reply_prefix": "[bot] ",                       # 私聊时自动回复的前缀，用于区分真人
   "group_chat_prefix": ["@bot"],                              # 群聊时包含该前缀则会触发机器人回复
   "group_name_white_list": ["ChatGPT测试群", "ChatGPT测试群2"], # 开启自动回复的群名称列表
+  "group_name_need_many_spaces": [],                          # 自动加上大量空格以实线折叠回复的群名称
   "group_chat_in_one_session": ["ChatGPT测试群"],              # 支持会话上下文共享的群名称  
   "image_create_prefix": ["画", "看", "找"],                   # 开启图片回复的前缀
   "conversation_max_tokens": 1000,                            # 支持上下文记忆的最多字符数
